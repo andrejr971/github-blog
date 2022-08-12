@@ -20,6 +20,15 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.colors.base_text};
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.2s ease-in;
+
+    &::-webkit-scrollbar {
+      width: 0.4rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: ${({ theme }) => theme.colors.base_label};
+      border-radius: 0.2rem;
+    }
   }
 
   body, input, textarea, button {

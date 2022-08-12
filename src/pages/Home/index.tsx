@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { api } from '../../lib/axios'
 import { ArrowSquareOut, GithubLogo, Buildings, Users } from 'phosphor-react'
 import { SearchForm } from './components/SearchForm'
@@ -34,6 +35,10 @@ type Data = {
   created_at: string
 }
 
+type SearchGithub = {
+  items: Data[]
+}
+
 export function Home() {
   const [profile, setProfile] = useState<Profile>()
   const [issues, setIssues] = useState<Issue[]>([])
@@ -64,6 +69,35 @@ export function Home() {
       })),
     )
   }
+
+  const [searchParams, _] = useSearchParams()
+  const search = searchParams.get('search')
+
+  useEffect(() => {
+    if (search) {
+      async function searchIssue() {
+        const { data } = await api.get<SearchGithub>(
+          `https://api.github.com/search/issues`,
+          {
+            params: {
+              q: `${search} repo:andrejr971/github-blog`,
+            },
+          },
+        )
+
+        setIssues(
+          data.items.map((d) => ({
+            ...d,
+            id: d.number,
+            createdAt: new Date(d.created_at),
+          })),
+        )
+      }
+      searchIssue()
+    } else {
+      loadIssues()
+    }
+  }, [search])
 
   useEffect(() => {
     loadProfile()

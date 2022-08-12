@@ -107,4 +107,8 @@ export const Issues = styled.main`
   gap: 3.2rem;
 
   margin-top: 4.8rem;
+
+  @media screen and (max-width: 640px) {
+    grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
+  }
 `

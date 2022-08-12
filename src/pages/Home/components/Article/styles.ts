@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components'
 import ReactMarkdown from 'react-markdown'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-export const Container = styled(NavLink)`
+export const Container = styled(Link)`
   ${({ theme }) => css`
     display: flex;
     flex-direction: column;
