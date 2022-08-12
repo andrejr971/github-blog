@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react'
 import { api } from '../../lib/axios'
 import { ArrowSquareOut, GithubLogo, Buildings, Users } from 'phosphor-react'
+import { SearchForm } from './components/SearchForm'
+import { Article } from './components/Article'
 
-import { Container, InformationUser, InformationUserContent } from './styles'
+import {
+  Container,
+  InformationUser,
+  InformationUserContent,
+  Issues,
+} from './styles'
 
 type Profile = {
   name: string
@@ -13,8 +20,23 @@ type Profile = {
   followers: number
 }
 
+type Issue = {
+  id: number
+  title: string
+  body: string
+  createdAt: Date
+}
+
+type Data = {
+  number: number
+  title: string
+  body: string
+  created_at: string
+}
+
 export function Home() {
   const [profile, setProfile] = useState<Profile>()
+  const [issues, setIssues] = useState<Issue[]>([])
 
   async function loadProfile() {
     const { data } = await api.get('users/andrejr971')
@@ -29,8 +51,23 @@ export function Home() {
     })
   }
 
+  async function loadIssues() {
+    const { data } = await api.get<Data[]>(
+      'repos/andrejr971/github-blog/issues',
+    )
+
+    setIssues(
+      data.map((d) => ({
+        ...d,
+        id: d.number,
+        createdAt: new Date(d.created_at),
+      })),
+    )
+  }
+
   useEffect(() => {
     loadProfile()
+    loadIssues()
   }, [])
 
   return (
@@ -71,6 +108,12 @@ export function Home() {
           </InformationUserContent>
         </InformationUser>
       )}
+
+      <SearchForm totalIssues={issues && issues.length} />
+
+      <Issues>
+        {issues && issues.map((issue) => <Article key={issue.id} {...issue} />)}
+      </Issues>
     </Container>
   )
 }

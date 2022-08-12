@@ -100,3 +100,11 @@ export const InformationUserContent = styled.div`
     }
   `}
 `
+
+export const Issues = styled.main`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
+  gap: 3.2rem;
+
+  margin-top: 4.8rem;
+`
